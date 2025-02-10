@@ -6,13 +6,14 @@
     color: #888;
     /* for horizontal scrollbar */
 }
-  ::-webkit-scrollbar-thumb {
-      background-color: #dbc4c441;
-      opacity: 0.4;
+::-webkit-scrollbar-thumb {
+  background-color: #dbc4c441;
+  opacity: 0.4;
 
-    /* Set color for scrollbar thumb */
-    }
+  /* Set color for scrollbar thumb */
+  }
+  
   ::-webkit-scrollbar-thumb:hover {
-      background: #1c1b1b;
-      /* Change color on hover */
+    background: #1c1b1b;
+    /* Change color on hover */
   }
