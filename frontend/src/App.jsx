@@ -15,25 +15,37 @@ function App() {
       const req = await fetch('http://127.0.0.1:5000/api/get_items');
       const res = await req.json();
       const data = await res.items;
+      console.log(data)
       setitems(data)
     }
     helper()
-    console.log(items)
+    // console.log(items)
   }, [])
+
+
+
+
+
+
+
 
   if (items) {
   return (
 
     <div className="max-w-screen h-screen flex overflow-x-clip relative ">
-      {citem &&
         <div className={`z-30 bg-white border-2 rounded-2xl border-slate-200 transition-all duration-1000 w-[40vw] h-[90vh] fixed top-[5vh]  ${side ? 'left-5 ' : '-left-[50vw] '} `}>
           <div className="w-[100%] h-[50%] mt-10 ">
-            <img className='w-[40%] m-auto h-full' src={citem.imgUrl} alt="" />
+          <img className='w-[40%] m-auto h-full' src={citem ? citem.imgUrl : ''} title={citem ? citem.title : ''} stars={citem ? citem.stars : ''} reviews={citem ? citem.reviews : ''} price={citem ? citem.price : ''} alt="" />
           </div>
 
-          <div className="w-full h-[40%] border-t border-slate-300 mt-2 "></div>
+        <div className="w-full h-[40%] border-t border-slate-300 mt-2 flex flex-col items-center justify-center ">
+          <span>{citem ? citem.title : ''}</span>
+          <span>{citem ? citem.stars : ''}</span>
+          <span>{citem ? citem.reviews : ''}</span>
+          <span>{citem ? citem.price : ''}</span>
+        </div>
         </div >
-      }
+
       
       <div  className={` z-30 bg-white border-2 rounded-2xl border-slate-200 shadow-sm transition-all duration-1000 w-[55vw] h-[90vh] fixed top-[5vh]   ${side?'right-5 ':'-right-[80vw] ' } `}>
         <button className='w-5 hover:cursor-pointer hover:scale-125 transition-all duration-300 h-5 absolute top-2 right-2 text-xl flex items-center justify-center ' onClick={() => {setsidebar(!side)}}><MdCancel /></button>
@@ -66,7 +78,12 @@ function App() {
   )
   }
   else {
-    return <div className="w-screen h-screen flex items-center justify-center">Loading...</div>
+    return <div className="w-screen h-screen flex flex-col items-center justify-center">
+      <div className=" border-slate-900 border-b w-10 h-10 flex items-center justify-center rounded-full animate-spin duration-500 ">
+
+      </div>
+      <div className=" mt-5 opacity-80 text-xs">Server will take atleast 1 min for first request. Please wait.</div>
+    </div>
   }
 }
 
