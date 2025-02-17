@@ -11,7 +11,7 @@ def get_items():
     try:
         with open('data/amazon_products.csv', mode='r', encoding='utf-8') as file:
             reader = csv.DictReader(file)
-            data = [row for i, row in enumerate(reader) if i < 100]
+            data = [row for i, row in enumerate(reader) if i < 10]
             return jsonify({"items": data}), 200
     except FileNotFoundError:
         print('File not found')
@@ -19,10 +19,17 @@ def get_items():
         print(e)
 
 
-@app.route('/api/recommendation', methods=['GET'])
+@app.route('/api/recommendations', methods=['GET'])
 def get_recommendations():
-    id = request.get_json()['id']
-    return jsonify({"recommendations": [id]}), 200
+    try:
+        with open('data/amazon_products.csv', mode='r', encoding='utf-8') as file:
+            reader = csv.DictReader(file)
+            data = [row for i, row in enumerate(reader) if i < 10]
+            return jsonify({"items": data}), 200
+    except FileNotFoundError:
+        print('File not found')
+    except Exception as e:
+        print(e)
 
 if __name__ == '__main__':
     app.run(debug=True)
