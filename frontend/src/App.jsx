@@ -18,10 +18,19 @@ function App() {
     const data = await res.items;
     setitems(data)
   }
+
   const getRecommendations = async () => {
     setrecommendations([])
+    console.log(citem)
+    const req = await fetch('http://127.0.0.1:5000/api/recommendations', {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(citem)
+    });
 
-    const req = await fetch('http://127.0.0.1:5000/api/recommendations');
+
     const res = await req.json();
     const recc = await res.items;
     setrecommendations(recc)
@@ -30,6 +39,12 @@ function App() {
     getAllItems()
   }, [])
 
+  useEffect(() => {
+    if (citem) {
+      getRecommendations()
+    }
+  }
+    , [citem])
 
   if (items) {
     return (
@@ -55,8 +70,6 @@ function App() {
         </div>
         </div >
 
-
-
         <div className={`  z-30 bg-white border-2 rounded-2xl border-slate-200 shadow-sm transition-all duration-1000 w-[55vw] h-[90vh] fixed top-[5vh]   ${side ? 'right-5 ' : '-right-[80vw] '} `}>
           {recommendations.length === 0 &&
             <div className='w-[100%] flex flex-col items-center justify-center h-[100%] bg-white rounded-3xl absolute top-0 left-0'>
@@ -68,28 +81,26 @@ function App() {
           <div className="rounded-xl w-full h-10 bg-white text-black font-extralight text-center flex items-center justify-center">RECOMMONDATIONS</div>
           <div className=" w-full h-[93%] flex items-center justify-center flex-wrap overflow-y-scroll">
             {
-              recommendations.map((i) => {
-                return <div key={i.title} onClick={() => { setcitem(i); getRecommendations() }} className="w-fit h-fit"><Rcard url={i.imgUrl} title={i.title} price={i.price} stars={i.stars} /></div>
+              recommendations.length > 0 && recommendations.map((i) => {
+                return <div key={i.title} onClick={() => { setcitem(i); }} className="w-fit h-fit"><Rcard url={i.imgUrl} title={i.title} price={i.price} stars={i.stars} /></div>
               })
             }
         </div>
-
 
       </div>
 
       <div className= {`w-screen h-screen trasition-all duration-1000 absolute top-0 left-0 z-0 ${side?'blur-[3px]':''}`} >
       <Navbar />
 
-
         <div className="w-full min-h-screen h-fit flex flex-wrap items-center justify-center ">
           {
-            items.map((i) => {
-              return <div key={i.title} onClick={() => { setsidebar(!side); setcitem(i); getRecommendations() }} className="w-fit h-fit"><Card url={i.imgUrl} title={i.title} price={i.price} stars={i.stars} /></div> 
+              items && items.map((i) => {
+                return <div key={i.title} onClick={() => { setsidebar(!side); setcitem(i); }} className="w-fit h-fit"><Card url={i.imgUrl} title={i.title} price={i.price} stars={i.stars} /></div> 
             })
           }
         </div>
-      </div>      
 
+        </div>      
 
     </div>
   )
