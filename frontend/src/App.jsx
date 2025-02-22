@@ -129,7 +129,7 @@ function App() {
       <div className=" border-slate-900 border-b w-10 h-10 flex items-center justify-center rounded-full animate-spin duration-500 ">
 
       </div>
-      <div className=" mt-5 opacity-80 text-xs">Server will take atleast 1 min for first request. Please wait.</div>
+      <div className=" mt-5 opacity-80 text-xs">Server is not responding. Free tier limit reached for the month.</div>
     </div>
   }
 }
