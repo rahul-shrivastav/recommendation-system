@@ -6,7 +6,7 @@
 
 A recommendation model using Machine Learning integrated in a simple web application.
 
-[![VISIT](https://img.shields.io/badge/-VISIT-blue?style=for-the-badge)]()
+[![VISIT](https://img.shields.io/badge/-VISIT-blue?style=for-the-badge)](https://recommendation-system-steel.vercel.app/)
 
 ## Tech Stack
 - ` Python ` : versatile, high-level, interpreted, easy-to-learn programming language.
