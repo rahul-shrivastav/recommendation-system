@@ -93,7 +93,7 @@ function App() {
           {recommendations.length === 0 &&
             <div className='w-[100%] flex flex-col items-center justify-center h-[100%] bg-white rounded-3xl absolute top-0 left-0'>
               <div className=" border-slate-900 border-b w-10 h-10 flex items-center justify-center rounded-full animate-spin duration-500 "></div>
-              <div className=" mt-5 opacity-80 text-xs">Fetching Recommendations. Please wait.</div>
+              <div className=" mt-5 opacity-80 text-xs">Server is not responding. Free tier limit reached for the month.</div>
             </div>
           }
           <button className='w-5 hover:cursor-pointer hover:scale-125 transition-all duration-300 h-5 absolute top-2 right-2 text-xl flex items-center justify-center ' onClick={() => { setsidebar(!side) }}><MdCancel /></button>
@@ -129,7 +129,7 @@ function App() {
       <div className=" border-slate-900 border-b w-10 h-10 flex items-center justify-center rounded-full animate-spin duration-500 ">
 
       </div>
-      <div className=" mt-5 opacity-80 text-xs"> Server is not responding. Free tier limit reached for the month. </div>
+      <div className=" mt-5 opacity-80 text-xs">Loading the products data. Please wait. </div>
     </div>
   }
 }
