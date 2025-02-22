@@ -6,8 +6,8 @@ import joblib
 app = Flask(__name__)
 CORS(app)
 
-model = joblib.load('../models/knn_model.pkl')
-data = joblib.load('../models/original_data.pkl')
+model = joblib.load('models/knn_model.pkl')
+data = joblib.load('models/original_data.pkl')
 
 
 @app.route('/api/test', methods=['GET'])
