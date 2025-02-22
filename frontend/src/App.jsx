@@ -65,7 +65,7 @@ function App() {
   }
     , [citem])
 
-  if (items && serverloading === true) {
+  if (items) {
     return (
 
       <div className="max-w-screen h-screen flex overflow-x-clip relative ">
@@ -129,7 +129,7 @@ function App() {
       <div className=" border-slate-900 border-b w-10 h-10 flex items-center justify-center rounded-full animate-spin duration-500 ">
 
       </div>
-      <div className=" mt-5 opacity-80 text-xs">Server is not responding. Free tier limit reached for the month.</div>
+      <div className=" mt-5 opacity-80 text-xs"> Server is not responding. Free tier limit reached for the month. </div>
     </div>
   }
 }
