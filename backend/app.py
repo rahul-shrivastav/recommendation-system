@@ -6,8 +6,8 @@ import joblib
 app = Flask(__name__)
 CORS(app)
 
-model = joblib.load('model/knn_model.pkl')
-data = joblib.load('model/original_data.pkl')
+model = joblib.load('../models/knn_model.pkl')
+data = joblib.load('../models/original_data.pkl')
 
 @app.route('/api/recommendations', methods=['POST'])
 def get_recommendations():
@@ -24,7 +24,7 @@ def get_recommendations():
         recommendations = model.kneighbors(
             [sample], n_neighbors=11, return_distance=False)
         response = []
-
+        print(data.iloc[0, :10])
         for i in recommendations[0][1:]:
             if data.iloc[i, :]['asin'] == item['asin']:
                 continue
@@ -36,9 +36,8 @@ def get_recommendations():
             obj['asin'] = data.iloc[i, :]['asin']
             obj['price'] = float(data.iloc[i, :]['price'])
             obj['isBestSeller'] = (data.iloc[i, :]['isBestSeller'] == 'True')
-            obj['boughtInLastMonth'] = int(data.iloc[i, :]['price'])
 
-            for ind, i in enumerate(list(data.iloc[i, 8:])):
+            for ind, i in enumerate(list(data.iloc[i, 7:])):
                 if i:
                     obj['category_id'] = float(ind+1)
                     break
