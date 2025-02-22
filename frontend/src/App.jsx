@@ -12,21 +12,7 @@ function App() {
   const [items, setitems] = useState([])
   const [citem, setcitem] = useState(null)
   const [recommendations, setrecommendations] = useState([]);
-
-  const getRecommendations = async () => {
-    setrecommendations([])
-    const req = await fetch(`${import.meta.env.VITE_API}/api/recommendations`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(citem)
-    });
-
-    const res = await req.json();
-    const recc = await res.items;
-    setrecommendations(recc)
-  }
+  const [serverloading, setloading] = useState(true)
 
   useEffect(() => {
     const fetchCSV = async () => {
@@ -46,40 +32,40 @@ function App() {
     fetchCSV();
   }, []);
 
-  // useEffect(() => {
-  //   Papa.parse('https://drive.google.com/file/d/1OmIXQfP0tBOv5zPmhGxcFmIldFJzSBSE/view?usp=sharing', {
-  //     download: true,
-  //     header: false, // Reads CSV as objects
-  //     worker: true, // Runs parsing in a separate thread
-  //     step: (row) => {
-  //       // Process row-by-row (streaming)
-  //       setitems((prev) => [...prev, row.data]);
-  //     },
-  //     complete: () => {
-  //       console.log(items);
-  //       console.log("CSV fully loaded");
-  //     },
-  //   });
-  // }, []);
+  useEffect(() => {
+    const testserver = async () => {
+      const req = await fetch(`${import.meta.env.VITE_API}/api/test`)
+      const res = await req.json();
+      if (res.running) {
+        setloading(false);
+      }
 
-
-
-
-
-
-
-
-
-
+    }
+    testserver();
+  }, [])
 
   useEffect(() => {
+    const getRecommendations = async () => {
+      setrecommendations([])
+      const req = await fetch(`${import.meta.env.VITE_API}/api/recommendations`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(citem)
+      });
+
+      const res = await req.json();
+      const recc = await res.items;
+      setrecommendations(recc)
+    }
     if (citem) {
       getRecommendations()
     }
   }
     , [citem])
 
-  if (items) {
+  if (items && serverloading === false) {
     return (
 
       <div className="max-w-screen h-screen flex overflow-x-clip relative ">

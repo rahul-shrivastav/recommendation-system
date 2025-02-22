@@ -9,6 +9,11 @@ CORS(app)
 model = joblib.load('../models/knn_model.pkl')
 data = joblib.load('../models/original_data.pkl')
 
+
+@app.route('/api/test', methods=['GET'])
+def test_server():
+    return jsonify({"running": True}), 200
+
 @app.route('/api/recommendations', methods=['POST'])
 def get_recommendations():
     try:
