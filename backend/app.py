@@ -9,31 +9,44 @@ CORS(app)
 model = joblib.load('model/knn_model.pkl')
 data = joblib.load('model/original_data.pkl')
 
-@app.route('/api/get_items', methods=['GET'])
-def get_items():
-    try:
-        with open('data/amazon_products.csv', mode='r', encoding='utf-8') as file:
-            reader = csv.DictReader(file)
-            data = [row for i, row in enumerate(reader) if i < 10]
-            return jsonify({"items": data}), 200
-    except FileNotFoundError:
-        print('File not found')
-    except Exception as e:
-        print(e)
-
-
 @app.route('/api/recommendations', methods=['POST'])
 def get_recommendations():
     try:
         item = request.json
 
-        print([i for i in item.keys()])
-        sample = [item['stars'], item['reviews'], item['price'],
-                  item['isBestSeller'], item['boughtInLastMonth']]
+        sample = [float(item['stars']), int(item['reviews']), float(item['price']),
+                  item['isBestSeller'] == 'True']
 
-        print(sample)
+        encoded_category = [0.0] * 270
+        encoded_category[int(item['category_id'])-1] = 10.0
+        sample.extend(encoded_category)
 
-        return jsonify({"items": []}), 200
+        recommendations = model.kneighbors(
+            [sample], n_neighbors=11, return_distance=False)
+        response = []
+
+        for i in recommendations[0][1:]:
+            if data.iloc[i, :]['asin'] == item['asin']:
+                continue
+            obj = {}
+            obj['imgUrl'] = (data.iloc[i, :]['imgUrl'])
+            obj['stars'] = float(data.iloc[i, :]['stars'])
+            obj['reviews'] = int(data.iloc[i, :]['reviews'])
+            obj['title'] = data.iloc[i, :]['title']
+            obj['asin'] = data.iloc[i, :]['asin']
+            obj['price'] = float(data.iloc[i, :]['price'])
+            obj['isBestSeller'] = (data.iloc[i, :]['isBestSeller'] == 'True')
+            obj['boughtInLastMonth'] = int(data.iloc[i, :]['price'])
+
+            for ind, i in enumerate(list(data.iloc[i, 8:])):
+                if i:
+                    obj['category_id'] = float(ind+1)
+                    break
+
+            response.append(obj)
+
+        return jsonify({"items": response}), 200
+
     except Exception as e:
         print('Error:\n', e)
 

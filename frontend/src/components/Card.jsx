@@ -8,7 +8,7 @@ const Card = ({ url, title, price, stars }) => {
         <img src={url} className='w-[80%] h-[100%] m-auto' alt="" />
       </div>
       <div className="h-[25%] w-full mt-2">
-        <div className="w-full text-center font-light text-sm">{title.slice(0, 60) + '...'}</div>
+        <div className="w-full text-center font-light text-sm">{title.slice(0, 50) + '...'}</div>
         <div className="flex mt-1">
           <div className="w-full text-center font-semibold text-md">$ {price}</div>
           <div className="w-full text-center font-semibold text-md flex items-center justify-center"><LiaStarSolid /> {stars}</div>

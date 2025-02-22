@@ -1,28 +1,21 @@
 import { useEffect, useState } from 'react'
 import './App.css'
-import { MdCancel } from "react-icons/md";
 import Card from './components/Card';
 import Navbar from './components/Navbar';
 import Rcard from './components/Rcard';
+import Papa from "papaparse";
+import { MdCancel } from "react-icons/md";
 import { LiaStarSolid } from "react-icons/lia";
 
 function App() {
   const [side, setsidebar] = useState(false)
-  const [items, setitems] = useState(null)
+  const [items, setitems] = useState([])
   const [citem, setcitem] = useState(null)
   const [recommendations, setrecommendations] = useState([]);
 
-  const getAllItems = async () => {
-    const req = await fetch('http://127.0.0.1:5000/api/get_items');
-    const res = await req.json();
-    const data = await res.items;
-    setitems(data)
-  }
-
   const getRecommendations = async () => {
     setrecommendations([])
-    console.log(citem)
-    const req = await fetch('http://127.0.0.1:5000/api/recommendations', {
+    const req = await fetch(`${import.meta.env.VITE_API}/api/recommendations`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -30,14 +23,54 @@ function App() {
       body: JSON.stringify(citem)
     });
 
-
     const res = await req.json();
     const recc = await res.items;
     setrecommendations(recc)
   }
+
   useEffect(() => {
-    getAllItems()
-  }, [])
+    const fetchCSV = async () => {
+      const response = await fetch("dataset.csv");
+      const text = await response.text();
+
+      Papa.parse(text, {
+        header: true,
+        skipEmptyLines: true,
+        complete: (result) => {
+          const shuffled = result.data.sort(() => 0.5 - Math.random());
+          setitems(shuffled.slice(0, 250));
+        },
+      });
+    };
+
+    fetchCSV();
+  }, []);
+
+  // useEffect(() => {
+  //   Papa.parse('https://drive.google.com/file/d/1OmIXQfP0tBOv5zPmhGxcFmIldFJzSBSE/view?usp=sharing', {
+  //     download: true,
+  //     header: false, // Reads CSV as objects
+  //     worker: true, // Runs parsing in a separate thread
+  //     step: (row) => {
+  //       // Process row-by-row (streaming)
+  //       setitems((prev) => [...prev, row.data]);
+  //     },
+  //     complete: () => {
+  //       console.log(items);
+  //       console.log("CSV fully loaded");
+  //     },
+  //   });
+  // }, []);
+
+
+
+
+
+
+
+
+
+
 
   useEffect(() => {
     if (citem) {
@@ -82,7 +115,7 @@ function App() {
           <div className=" w-full h-[93%] flex items-center justify-center flex-wrap overflow-y-scroll">
             {
               recommendations.length > 0 && recommendations.map((i) => {
-                return <div key={i.title} onClick={() => { setcitem(i); }} className="w-fit h-fit"><Rcard url={i.imgUrl} title={i.title} price={i.price} stars={i.stars} /></div>
+                return <div key={i.asin} onClick={() => { setcitem(i); }} className="w-fit h-fit"><Rcard url={i.imgUrl} title={i.title} price={i.price} stars={i.stars} /></div>
               })
             }
         </div>
@@ -94,8 +127,8 @@ function App() {
 
         <div className="w-full min-h-screen h-fit flex flex-wrap items-center justify-center ">
           {
-              items && items.map((i) => {
-                return <div key={i.title} onClick={() => { setsidebar(!side); setcitem(i); }} className="w-fit h-fit"><Card url={i.imgUrl} title={i.title} price={i.price} stars={i.stars} /></div> 
+              items.length > 0 && items.map((i) => {
+                return <div key={i.asin} onClick={() => { setsidebar(!side); setcitem(i); }} className="w-fit h-fit"><Card url={i.imgUrl} title={i.title} price={i.price} stars={i.stars} /></div> 
             })
           }
         </div>
