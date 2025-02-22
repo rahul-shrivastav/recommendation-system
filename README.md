@@ -9,10 +9,7 @@
 ![NumPy](https://img.shields.io/badge/NumPy-1.21.2-013243?style=flat&logo=numpy)
 ![KNN](https://img.shields.io/badge/KNN-Algorithm-green?style=flat&logo=scikitlearn)
 
-
-
-
-A recommendation model trained on Amazon's product dataset integrated in a simple web application.
+A React and Tailwind CSS-based product application that provides personalized product recommendations using machine learning. The backend is built with Flask and Python, leveraging scikit-learn's K-Nearest Neighbors (KNN) algorithm to suggest similar products based on user interactions or product attributes.
 
 [![VISIT](https://img.shields.io/badge/-VISIT-blue?style=for-the-badge)](https://recommendation-system-steel.vercel.app/)
 
