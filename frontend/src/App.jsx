@@ -65,7 +65,7 @@ function App() {
   }
     , [citem])
 
-  if (items && serverloading === false) {
+  if (items && serverloading === true) {
     return (
 
       <div className="max-w-screen h-screen flex overflow-x-clip relative ">
